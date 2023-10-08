@@ -21,11 +21,14 @@ from google.analytics.data_v1beta.types import (
     RunReportRequest,
 )
 
-
 http = requests.Session()
 API_SERVICE_NAME = "webmasters"
 API_VERSION = "v3"
-SCOPE = ["https://www.googleapis.com/auth/webmasters.readonly", "https://www.googleapis.com/auth/analytics", "https://www.googleapis.com/auth/analytics.edit"]
+SCOPE = [
+    "https://www.googleapis.com/auth/webmasters.readonly",
+    "https://www.googleapis.com/auth/analytics",
+    "https://www.googleapis.com/auth/analytics.edit",
+]
 SERVICE_ACCOUNT_EMAIL = "quinta@seo-reporter.iam.gserviceaccount.com"
 
 
@@ -98,6 +101,7 @@ def visits_perf() -> Dict:
     })
     return visits_by_domain
 
+
 @cache
 def get_google_property():
     source_credentials, _ = google.auth.default(scopes=SCOPE)
@@ -111,7 +115,6 @@ def get_google_property():
     for account in client.list_account_summaries():
         for prop in account.property_summaries:
             yield prop.property
-
 
 
 @cache
