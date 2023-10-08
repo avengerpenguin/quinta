@@ -147,6 +147,17 @@ def auth_using_impersonation() -> Resource:
     return service
 
 
+def score(metrics):
+    domain, is_up, word_count, search_clicks, search_imp, search_pos, ctr, gtag, users = metrics
+    s = (
+        int(users.isdigit() and users or 0) * 10000
+        + int(search_clicks) * 100
+        + int(search_imp) * 10
+        + int(word_count)
+    )
+    return *metrics, str(s / 10000)
+
+
 if __name__ == "__main__":
     DOMAINS = [
         "rossfenning.co.uk",
@@ -167,9 +178,10 @@ if __name__ == "__main__":
     table.add_column("Min CTR")
     table.add_column("Google Tag ID")
     table.add_column("Users 28d")
+    table.add_column("Score")
 
     for d in DOMAINS:
-        table.add_row(*make_row(d))
+        table.add_row(*score(make_row(d)))
 
     console = Console()
     console.print(table)
